@@ -41,12 +41,11 @@ Plan.associate = function(models) {
   );
 }
 
-Plan.prototype.apiRepr = function() {
+Plan.prototype.apiRepr = function(meals) {
   return {
     id: this.id,
     date: this.date,
-    meals: meals,
-    mealsplans: mealsplans
+    meals: meals
   }
 }
 

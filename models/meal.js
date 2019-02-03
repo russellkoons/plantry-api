@@ -31,7 +31,7 @@ Meal.associate = function(models) {
   );
 }
 
-Meal.prototype.apiRepr = function() {
+Meal.prototype.apiRepr = function(ingredients) {
   return {
     id: this.id,
     meal: this.meal,
