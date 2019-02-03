@@ -12,13 +12,14 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0"
   },
   "devDependencies": {},
   "scripts": {
     "start": "node server.js",
-    "test": "cross-env NODE_ENV=test mocha --timeout 5000 --exit"
+    "test": "NODE_ENV=test mocha --timeout 5000 --exit"
   },
   "repository": {
     "type": "git",
