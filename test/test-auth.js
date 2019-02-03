@@ -43,6 +43,35 @@ describe('Auth', function() {
           res.body.authToken.should.be.a('string');
           jwt.verify(res.body.authToken, JWT_SECRET);
         });
+    });
+
+    it('should return a valid JWT with correct fields', function() {
+      return chai.request(app)
+        .post('/auth/login')
+        .send({
+          username,
+          password
+        })
+        .then(res => {
+          const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+
+          payload.user.id.should.equal(user.id);
+          payload.user.username.should.equal(user.username);
+        });
+    });
+
+    it('should return a JWT that does not have a password', function() {
+      return chai.request(app)
+        .post('/auth/login')
+        .send({
+          username,
+          password
+        })
+        .then(res => {
+          const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+
+          payload.should.not.have.property('password');
+        })
     })
   })
 })
