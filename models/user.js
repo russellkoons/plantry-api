@@ -1,7 +1,7 @@
 'use strict';
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
-const sequelize = require('../db/sequelize');
+const {sequelize} = require('../db/sequelize');
 
 const User = sequelize.define('User', {
   username: {

@@ -1,6 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
-const sequelize = require('../db/sequelize');
+const {sequelize} = require('../db/sequelize');
 
 const Ingredient = sequelize.define('Ingredient', {
   ingredient: {

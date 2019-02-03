@@ -1,9 +1,9 @@
 'use strict';
 
 const User = require('./user');
-const Plan = require('./plans');
-const Meal = require('./meals');
-const Ingredient = require('./ingredients');
+const Plan = require('./plan');
+const Meal = require('./meal');
+const Ingredient = require('./ingredient');
 
 const db = {
   User,
