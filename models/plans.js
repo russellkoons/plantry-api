@@ -24,16 +24,16 @@ Plan.associate = function(models) {
     }
   );
 
-  Plan.hasMany(
-    models.MealPlan,
-    {
-      as: 'mealsplans',
-      foreignKey: {
-        as: 'mealsplans_id',
-        allowNull: false
-      }
-    }
-  )
+  // Plan.hasMany(
+  //   models.MealPlan,
+  //   {
+  //     as: 'mealsplans',
+  //     foreignKey: {
+  //       as: 'mealsplans_id',
+  //       allowNull: false
+  //     }
+  //   }
+  // )
 
   Plan.belongsTo(
     models.User,

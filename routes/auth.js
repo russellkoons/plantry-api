@@ -18,7 +18,7 @@ const createAuthToken = function(user) {
     });
 };
 
-router.post("/login", localAuth, (req, res, next) => {
+router.post('/login', localAuth, (req, res, next) => {
     createAuthToken(req.user)
     .then(authToken => {
         res.json({authToken});
@@ -28,7 +28,7 @@ router.post("/login", localAuth, (req, res, next) => {
     });
 });
 
-router.post("/refresh", jwtAuth, (req, res, next) => {
+router.post('/refresh', jwtAuth, (req, res, next) => {
     createAuthToken(req.user)
         .then(authToken => {
             res.json({authToken});
