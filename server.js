@@ -2,7 +2,7 @@
 const dotenv = require('dotenv');
 dotenv.config({path: './.env'});
 const {PORT} = require('./config/config');
-const app = require('./app');
+const {app} = require('./app');
 
 let server;
 
