@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const jwt = require('jsonwebtoken');
-const app = require('../app');
+const {app} = require('../app');
 const {User} = require('../models');
 const {JWT_SECRET} = require('../config/config');
 
