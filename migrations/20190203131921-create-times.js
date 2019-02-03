@@ -9,10 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       time: {
-        type: Sequelize.STRING
-      },
-      sort: {
-        type: Sequelize.INTEGER
+        type: Sequelize.ENUM
       },
       createdAt: {
         allowNull: false,

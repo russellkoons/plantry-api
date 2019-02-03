@@ -1,0 +1,13 @@
+language: node_js
+node_js: node
+services:
+- postgresql
+before_script:
+- psql -c 'create database "test-plantry";' -U postgres
+deploy:
+  provider: heroku
+  api_key:
+    secure: NpIEAFr+7EXPbz0TiKA33l11GBH7oX0b4wx3gEyos2uJvUljts/jvy+VlvCx4Ob+C+oWt67iz6hE6L1IeQylcVvrK36r5h+1R0e2OSeIgraXjYUcgFNSHFkfGTOtFoWKNeEUhHWb2PDvmhvMscqPv1JjgIGdPKGgdFH6aYaje5jmbTR55pcYCUafR/vxeZISdYhI8dGpX/u9yzJEbSPAD1QQi23anWsv7itcWp56KDWCaQFhZ9L6S3c45LR5a6NErjHoIjlhZQ7pQllWN4sv8vtQ5mqfzFG0LBLQF1s56Qfx3nL4zexN2Vnil1Mpet4MKVLYNZqpUbEd4L5klXwhi53hzoLxGH1LhWaJpMVYxPQTr4JGkZN3sBZEd9IIHE56Ve5Emc5pXSgR/ZwyHxqK9S1fweIjRUwTJFo1M53le8yNJuDD4u1DzApn1glg+XvwUErHbJlSv9KleNy+i/NmlfU5Q3LejbYwcvGgZ5YZOCkPWWfTMuDp39UxQSuidfSs9AoooGGkwdlmBsZOZZN9s8IMNYXkJADx1QgDoAciuSMQscWJqSWYOsImrIBTc/ZYYUw2Z8LL0YeMIWyd2XIdWl2Mq/WrBTRCxdNhGTpwOtkwTyZ0e2DO7JUza6Eh2C7aJJIm2xJ+NgaJS0FtHfvi+HJpfBhtIjak+Nsh9Jd4pws=
+  app: plantry-api
+  on:
+    repo: russellkoons/plantry-api

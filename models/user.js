@@ -13,6 +13,9 @@ const User = sequelize.define('User', {
     type: Sequelize.STRING,
     allowNull: false
   }
+}, {
+  tableName: 'users',
+  underscored: true
 });
 
 User.associate = function(models) {

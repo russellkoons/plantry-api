@@ -1,11 +1,41 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const meals = sequelize.define('meals', {
-    meal: DataTypes.STRING,
-    notes: DataTypes.STRING
-  }, {});
-  meals.associate = function(models) {
-    // associations can be defined here
-  };
-  return meals;
-};
+const Sequelize = require('sequelize');
+const sequelize = require('../db/sequelize');
+
+const Meal = sequelize.define('Meal', {
+  meal: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'meals',
+  underscored: true
+});
+
+Meal.associate = function(models) {
+  Meal.hasMany(
+    models.Ingredient,
+    {
+      as: 'ingredients',
+      foreignKey: {
+        as: 'ingredient_id',
+        allowNull: false
+      }
+    }
+  );
+
+  Meal.belongsTo(
+    models.User,
+    {foreignKey: {allowNull: false}}
+  );
+}
+
+Meal.prototype.apiRepr = function() {
+  return {
+    id: this.id,
+    meal: this.meal,
+    ingredients: ingredients
+  }
+}
+
+module.exports = Meal;
