@@ -6,7 +6,8 @@ const Meal = sequelize.define('Meal', {
   meal: {
     type: Sequelize.STRING,
     allowNull: false
-  }
+  },
+  time: Sequelize.ENUM('Breakfast', 'Lunch', 'Dinner')
 }, {
   tableName: 'meals',
   underscored: true
@@ -34,6 +35,7 @@ Meal.prototype.apiRepr = function() {
   return {
     id: this.id,
     meal: this.meal,
+    time: this.time,
     ingredients: ingredients
   }
 }

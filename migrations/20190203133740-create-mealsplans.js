@@ -22,19 +22,11 @@ module.exports = {
           key: 'id'
         }
       },
-      day_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'days',
-          key: 'id'
-        }
+      day: {
+        type: Sequelize.ENUM('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')
       },
-      time_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'times',
-          key: 'id'
-        }
+      time: {
+        type: Sequelize.ENUM('Breakfast', 'Lunch', 'Dinner')
       },
       createdAt: {
         allowNull: false,

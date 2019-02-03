@@ -15,12 +15,8 @@ module.exports = {
           key: 'id'
         }
       },
-      time_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'times',
-          key: 'id'
-        }
+      time: {
+        type: Sequelize.ENUM('Breakfast', 'Lunch', 'Dinner')
       },
       createdAt: {
         allowNull: false,
