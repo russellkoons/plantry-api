@@ -1,29 +1,10 @@
-'use strict';
-const Sequelize = require('sequelize');
-const {sequelize} = require('../db/sequelize');
-
-const Ingredient = sequelize.define('Ingredient', {
-  ingredient: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-}, {
-  tableName: 'ingredients',
-  underscored: true
-});
-
-Ingredient.associate = function(models) {
-  Ingredient.belongsTo(
-    models.Meal,
-    {foreignKey: {allowNull: false}}
-  );
+module.exports = (sequelize, type) => {
+  return sequelize.define('ingredients', {
+      id: {
+        type: type.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      ingredient: type.STRING
+  })
 }
-
-Ingredient.prototype.apiRepr = function() {
-  return {
-    id: this.id,
-    ingredient: this.ingredient
-  }
-}
-
-module.exports = Ingredient;

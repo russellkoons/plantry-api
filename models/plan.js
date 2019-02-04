@@ -1,52 +1,10 @@
-'use strict';
-const Sequelize = require('sequelize');
-const {sequelize} = require('../db/sequelize');
-
-const Plan = sequelize.define('Plan', {
-  date: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-}, {
-  tableName: 'plans',
-  underscored: true
-});
-
-Plan.associate = function(models) {
-  Plan.hasMany(
-    models.Meal,
-    {
-      as: 'meals',
-      foreignKey: {
-        as: 'meal_id',
-        allowNull: false
-      }
-    }
-  );
-
-  // Plan.hasMany(
-  //   models.MealPlan,
-  //   {
-  //     as: 'mealsplans',
-  //     foreignKey: {
-  //       as: 'mealsplans_id',
-  //       allowNull: false
-  //     }
-  //   }
-  // )
-
-  Plan.belongsTo(
-    models.User,
-    {foreignKey: {allowNull: false}}
-  );
+module.exports = (sequelize, type) => {
+  return sequelize.define('plans', {
+      id: {
+        type: type.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      date: type.STRING
+  })
 }
-
-Plan.prototype.apiRepr = function(meals) {
-  return {
-    id: this.id,
-    date: this.date,
-    meals: meals
-  }
-}
-
-module.exports = Plan;
