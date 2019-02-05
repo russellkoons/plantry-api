@@ -38,7 +38,10 @@ function localAuth(req, res, next) {
             return Promise.reject(err);
         }
 
-        req.user = user.apiRepr();
+        req.user = {
+          id: user.id,
+          username: user.username
+        };
         next();
     })
     .catch(err => {

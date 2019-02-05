@@ -1,20 +1,20 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const {Plan} = require('../models');
+const {Plan, Meal, User} = require('../models');
 
 router.post('/', (req, res) => {
   const date = 'date';
   if (!(date in req.body)) {
     return res.status(400).send({message: 'Request must include date'});
   }
+  const meals = req.body.meals.map(m => Meal.findOrCreate({where: {meal: m.meal}, defaults: {meal: m.meal, time: m.time, notes: m.notes}}).spread((meal, created) => meal));
 
-  return Plan
-    .create({
-      date: req.body.date,
-      user_id: req.user.id
-    })
-    .then(plan => res.status(201).json(plan.apiRepr()))
+  User.findByPk(req.user.id)  
+    .then(() => Plan.create(req.body))
+    .then(plan => Promise.all(meals).then(storedMeals => plan.addMeals(storedMeals)).then(() => plan))
+    .then(plan => Plan.findOne({ where: {id: plan.id}, include: [User, Meal]}))
+    .then(_plan => res.status(201).json(_plan))
     .catch(err => res.status(500).send({message: err.message}));
 });
 
@@ -33,8 +33,7 @@ router.put('/:id', (req, res) => {
   return Plan
     .update(update, {
       where: {
-        id: req.params.id,
-        user_id: req.user.id
+        id: req.params.id
       }
     })
     .then(() => res.status(204).end())
@@ -45,8 +44,7 @@ router.delete('/:id', (req, res) => {
   return Plan
     .destroy({
       where: {
-        id: req.params.id,
-        user_id: req.user.id
+        id: req.params.id
       }
     })
     .then(() => res.status(204).end())

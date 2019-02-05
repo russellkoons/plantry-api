@@ -25,7 +25,10 @@ function seedUser() {
       password: hash
     }))
     .then(u => {
-      user = u.apiRepr();
+      user = {
+        id: u.id,
+        username: u.username
+      };
       authToken = jwt.sign({user}, JWT_SECRET, {expiresIn: JWT_EXPIRY});
     });
 }
@@ -33,10 +36,18 @@ function seedUser() {
 function generatePlan(userId=null) {
   const date = faker.date.recent()
   const plan = {
-    date: date.toDateString()
+    date: date.toDateString(),
+    meals: [
+      {
+        meal: faker.random.word(),
+        time: 'Breakfast',
+        day: 'Monday',
+        notes: faker.lorem.words()
+      }
+    ]
   }
   if (userId) {
-    plan.user_id = userId;
+    plan.userId = userId;
   }
   return plan;
 }
@@ -62,7 +73,16 @@ describe('Plan', function() {
     it('Should make a new plan', function() {
       const newDate = faker.date.recent();
       const newPlan = {
-        date: newDate.toDateString()
+        userId: user.id,
+        date: newDate.toDateString(),
+        meals: [
+          {
+            meal: faker.random.word(),
+            time: 'Lunch',
+            day: 'Sunday',
+            notes: faker.lorem.words()
+          }
+        ]
       };
 
       return chai.request(app)
@@ -76,13 +96,8 @@ describe('Plan', function() {
           res.body.should.include.keys('id', 'date');
           res.body.id.should.not.be.null;
           res.body.date.should.equal(newPlan.date);
-
-          return Plan.findByPk(res.body.id)
+          res.body.userId.should.equal(user.id);
         })
-        .then(plan => {
-          plan.date.should.equal(newPlan.date);
-          plan.user_id.should.equal(user.id);
-        });
     });
   });
 
@@ -110,7 +125,7 @@ describe('Plan', function() {
         })
         .then(_plan => {
           _plan.date.should.equal(update.date);
-          _plan.user_id.should.equal(user.id);
+          _plan.userId.should.equal(user.id);
         });
     });
   })

@@ -1,7 +1,16 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const {User} = require('../models');
+
+User.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+User.hashPassword = function(password) {
+  return bcrypt.hash(password, 10);
+};
 
 router.post('/', (req, res, next) => {
   const required = ['username', 'password'];
@@ -37,7 +46,7 @@ router.post('/', (req, res, next) => {
       };
       return User.create(newUser)
     })
-    .then(user => res.status(201).json(user.apiRepr()))
+    .then(user => res.status(201).json(user))
     .catch(err => {
       return res.status(500).send(err);
     });

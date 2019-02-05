@@ -16,23 +16,15 @@ const Day = DayModel(sequelize, Sequelize);
 const MealPlan = sequelize.define('mealplans', {});
 
 Plan.belongsTo(User);
+Meal.belongsTo(User);
 Ingredient.belongsTo(Meal);
 Meal.belongsToMany(Plan, { through: MealPlan, unique: false });
 Plan.belongsToMany(Meal, { through: MealPlan, unique: false });
 Meal.hasMany(Day, { as: 'days' });
 
-const db = {
-  User,
-  Plan,
-  Meal,
-  Ingredient,
-  MealPlan
-}
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log(`Database & tables created!`)
+  })
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-module.exports = db;
+module.exports = { User, Plan, Meal, Ingredient, Day, MealPlan };
