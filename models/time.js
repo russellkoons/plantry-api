@@ -3,9 +3,9 @@ const knex = require('../knex');
 
 Model.knex(knex);
 
-class Ingredient extends Model {
+class Time extends Model {
   static get tableName() {
-    return 'ingredients';
+    return 'times';
   }
 
   static get jsonSchema() {
@@ -14,8 +14,7 @@ class Ingredient extends Model {
 
       properties: {
         id: {type: 'integer'},
-        meal_id: {type: 'integer'},
-        ingredient: {type: 'string'}
+        time: {type: 'string'}
       }
     }
   }
@@ -24,16 +23,20 @@ class Ingredient extends Model {
     const Meal = require('./meal');
 
     return {
-      meal: {
-        relation: Model.BelongsToOneRelation,
+      meals: {
+        relation: Model.ManyToManyRelation,
         modelClass: Meal,
         join: {
-          from: 'ingredients.meal_id',
+          from: 'times.id',
+          through: {
+            from: 'mealtimes.time_id',
+            to: 'mealtimes.meal_id'
+          },
           to: 'meals.id'
         }
-      } 
+      }
     }
   }
 }
 
-module.exports = { Ingredient };
+module.exports = { Time };

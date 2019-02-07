@@ -2,14 +2,10 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const {PORT} = require('../config/config');
 const {runServer, closeServer} = require('../server');
-const {sequelize} = require('../db/sequelize');
 
 before(function() {
-    return sequelize
-        .sync({force: true})
-        .then(() => runServer(PORT));
+    return runServer(process.env.TEST_PORT);
 });
 
 after(function() {

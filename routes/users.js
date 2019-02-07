@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const {User} = require('../models');
+const { User } = require('../models');
 
 User.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
@@ -23,13 +23,10 @@ router.post('/', (req, res, next) => {
 
   const {username, password} = req.body;
 
-  return User.count({
-    where: {
-      username: username
-    }
-  })
-    .then(count => {
-      if (count > 0) {
+  return User.query()
+    .findOne({username: username})
+    .then(u => {
+      if (u) {
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
@@ -44,10 +41,11 @@ router.post('/', (req, res, next) => {
         username,
         password: hash
       };
-      return User.create(newUser)
+      return User.query().insert(newUser)
     })
     .then(user => res.status(201).json(user))
     .catch(err => {
+      console.log(err);
       return res.status(500).send(err);
     });
 });

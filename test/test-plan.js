@@ -3,9 +3,11 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const {app} = require('../app');
 const {Plan, User} = require('../models');
-const {JWT_SECRET, JWT_EXPIRY} = require('../config/config');
+
+dotenv.config();
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -29,7 +31,7 @@ function seedUser() {
         id: u.id,
         username: u.username
       };
-      authToken = jwt.sign({user}, JWT_SECRET, {expiresIn: JWT_EXPIRY});
+      authToken = jwt.sign({user}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRY});
     });
 }
 

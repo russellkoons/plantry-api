@@ -12,12 +12,8 @@ function localAuth(req, res, next) {
     }
 
     let user;
-    return User.findOne({
-        where: {
-            username: username
-        }
-    })
-    .then(_user => {
+    return User.query().findOne({username: username})
+      .then(_user => {
         user = _user;
 
         if(!user) {
@@ -28,8 +24,8 @@ function localAuth(req, res, next) {
         }
 
         return bcrypt.compare(password, user.password);
-    })
-    .then(isValid => {
+      })
+      .then(isValid => {
 
         if (!isValid) {
             const err = new Error("Invalid credentials");
@@ -43,10 +39,10 @@ function localAuth(req, res, next) {
           username: user.username
         };
         next();
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         next(err);
-    });
+      });
 }
 
 module.exports = localAuth;

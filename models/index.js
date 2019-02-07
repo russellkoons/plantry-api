@@ -1,30 +1,19 @@
 'use strict';
 
-const {sequelize} = require('../db/sequelize');
-const Sequelize = require('sequelize');
-const UserModel = require('./user');
-const PlanModel = require('./plan');
-const MealModel = require('./meal');
-const DayModel = require('./day');
-const IngredientModel = require('./ingredient');
+const {Ingredient} = require('./ingredient');
+const {Meal} = require('./meal');
+const {MealPlan} = require('./mealplan')
+const {Plan} = require('./plan');
+const {Time} = require('./time');
+const {User} = require('./user');
 
-const User = UserModel(sequelize, Sequelize);
-const Plan = PlanModel(sequelize, Sequelize);
-const Meal = MealModel(sequelize, Sequelize);
-const Ingredient = IngredientModel(sequelize, Sequelize);
-const Day = DayModel(sequelize, Sequelize);
-const MealPlan = sequelize.define('mealplans', {});
+const db = {
+  Ingredient,
+  Meal,
+  MealPlan,
+  Plan,
+  Time,
+  User
+};
 
-Plan.belongsTo(User);
-Meal.belongsTo(User);
-Ingredient.belongsTo(Meal);
-Meal.belongsToMany(Plan, { through: MealPlan, unique: false });
-Plan.belongsToMany(Meal, { through: MealPlan, unique: false });
-Meal.hasMany(Day, { as: 'days' });
-
-sequelize.sync({ force: false })
-  .then(() => {
-    console.log(`Database & tables created!`)
-  })
-
-module.exports = { User, Plan, Meal, Ingredient, Day, MealPlan };
+module.exports = db;

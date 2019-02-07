@@ -2,9 +2,11 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const {app} = require('../app');
 const {User} = require('../models');
-const {JWT_SECRET} = require('../config/config');
+
+dotenv.config();
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -19,7 +21,7 @@ describe('Auth', function() {
     password = faker.internet.password();
 
     return User.hashPassword(password)
-      .then(hash => User.create({
+      .then(hash => User.query().insert({
         username,
         password: hash
       }))
@@ -41,7 +43,7 @@ describe('Auth', function() {
           res.should.be.json;
           res.body.should.be.an('object');
           res.body.authToken.should.be.a('string');
-          jwt.verify(res.body.authToken, JWT_SECRET);
+          jwt.verify(res.body.authToken, process.env.JWT_SECRET);
         });
     });
 
@@ -53,7 +55,7 @@ describe('Auth', function() {
           password
         })
         .then(res => {
-          const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+          const payload = jwt.verify(res.body.authToken, process.env.JWT_SECRET);
 
           payload.user.id.should.equal(user.id);
           payload.user.username.should.equal(user.username);
@@ -68,7 +70,7 @@ describe('Auth', function() {
           password
         })
         .then(res => {
-          const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+          const payload = jwt.verify(res.body.authToken, process.env.JWT_SECRET);
 
           payload.should.not.have.property('password');
         })

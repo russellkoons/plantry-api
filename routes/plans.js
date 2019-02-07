@@ -1,20 +1,27 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const {Plan, Meal, User} = require('../models');
+const { Plan } = require('../models');
+
+router.get('/', (req, res) => {
+  return Plan.query()
+    .where('user_id', req.user.id)
+    .then(plans => res.status(201).status(plans))
+    .catch(err => res.status(500).status({message: err}));
+})
 
 router.post('/', (req, res) => {
   const date = 'date';
   if (!(date in req.body)) {
     return res.status(400).send({message: 'Request must include date'});
   }
-  const meals = req.body.meals.map(m => Meal.findOrCreate({where: {meal: m.meal}, defaults: {meal: m.meal, time: m.time, notes: m.notes}}).spread((meal, created) => meal));
 
-  User.findByPk(req.user.id)  
-    .then(() => Plan.create(req.body))
-    .then(plan => Promise.all(meals).then(storedMeals => plan.addMeals(storedMeals)).then(() => plan))
-    .then(plan => Plan.findOne({ where: {id: plan.id}, include: [User, Meal]}))
-    .then(_plan => res.status(201).json(_plan))
+  const newPlan = req.body;
+  newPlan.user_id = req.user.id;
+  
+  return Plan.query()
+    .insertGraphAndFetch(newPlan)
+    .then(p => res.status(201).json(p))
     .catch(err => res.status(500).send({message: err.message}));
 });
 
@@ -24,29 +31,18 @@ router.put('/:id', (req, res) => {
     res.status(400).json({message: message});
   }
 
-  const date = 'date';
-  const update = {};
-  if (date in req.body) {
-    update[date] = req.body[date];
-  }
+  const update = req.body;
+  update.user_id = req.user.id;
 
   return Plan
-    .update(update, {
-      where: {
-        id: req.params.id
-      }
-    })
+    .upsertGraph(update)
     .then(() => res.status(204).end())
     .catch(err => res.status(500).json({message: err.message}));
 });
 
 router.delete('/:id', (req, res) => {
-  return Plan
-    .destroy({
-      where: {
-        id: req.params.id
-      }
-    })
+  return Plan.query()
+    .deleteById(req.params.id)
     .then(() => res.status(204).end())
     .catch(err => res.status(500).json({message: err.message}));
 });

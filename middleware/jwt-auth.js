@@ -1,6 +1,7 @@
 'use strict';
 const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require('../config/config');
+const dotenv = require('dotenv');
+dotenv.config({path: '../.env'});
 
 function jwtAuth(req, res, next) {
 
@@ -21,7 +22,7 @@ function jwtAuth(req, res, next) {
         return next(err);
     }
 
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             err.message = "Invalid JWT";
             err.status = 401;

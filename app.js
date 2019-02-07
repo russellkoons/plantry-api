@@ -5,6 +5,7 @@ const jwtAuth = require('./middleware/jwt-auth');
 const userRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const planRouter = require('./routes/plans');
+const mealRouter = require('./routes/meals');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
 app.use('/plans', jwtAuth, planRouter);
+app.use('/meals', jwtAuth, mealRouter);
 
 app.get('/', (req, res) => {
   return res.status(200).json({message: 'Hello there'})

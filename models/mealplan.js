@@ -3,9 +3,9 @@ const knex = require('../knex');
 
 Model.knex(knex);
 
-class Ingredient extends Model {
+class MealPlan extends Model {
   static get tableName() {
-    return 'ingredients';
+    return 'mealplans'
   }
 
   static get jsonSchema() {
@@ -14,26 +14,28 @@ class Ingredient extends Model {
 
       properties: {
         id: {type: 'integer'},
-        meal_id: {type: 'integer'},
-        ingredient: {type: 'string'}
+        plan_id: {type: 'integer'},
+        meal: {type: 'string'},
+        time: {type: 'enum'},
+        day: {type: 'enum'}
       }
     }
   }
 
   static get relationMappings() {
-    const Meal = require('./meal');
+    const Plan = require('./user');
 
     return {
-      meal: {
+      user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Meal,
+        modelClass: Plan,
         join: {
-          from: 'ingredients.meal_id',
-          to: 'meals.id'
+          from: 'mealplans.plan_id',
+          to: 'plans.id'
         }
-      } 
+      }
     }
   }
 }
 
-module.exports = { Ingredient };
+module.exports = { MealPlan };

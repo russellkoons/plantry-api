@@ -28,7 +28,7 @@ describe('Users', function() {
 
           newUser.id = res.body.id;
 
-          return User.findByPk(res.body.id);
+          return User.query().findById(res.body.id);
         })
         .then(user => {
           user.id.should.equal(newUser.id);

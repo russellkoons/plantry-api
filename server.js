@@ -1,7 +1,6 @@
 'use strict';
 const dotenv = require('dotenv');
 dotenv.config({path: './.env'});
-const {PORT} = require('./config/config');
 const {app} = require('./app');
 
 let server;
@@ -33,7 +32,7 @@ function closeServer() {
 }
 
 if (require.main === module) {
-    runServer(PORT).catch( err => {
+    runServer(process.env.PORT).catch( err => {
         console.error(`Can't start server: ${err}`);
         throw err;
     });
