@@ -1,6 +1,6 @@
 'use strict';
 const dotenv = require('dotenv');
-const knex = require('knex')
+const knex = require('../knex')
 dotenv.config();
 
 const {runServer, closeServer} = require('../server');
