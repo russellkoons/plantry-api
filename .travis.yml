@@ -4,6 +4,7 @@ services:
 - postgresql
 before_script:
 - psql -c 'create database "test-plantry";' -U postgres
+- knex migrate:latest
 deploy:
   provider: heroku
   api_key:
