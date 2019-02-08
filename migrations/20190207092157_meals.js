@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
       t.dateTime('updatedAt').nullable().defaultTo(knex.fn.now());
 
       t.string('meal').notNull();
-      t.integer('user_id').references('users.id');
+      t.integer('user_id').references('users.id').onDelete('CASCADE');
       t.string('url');
       t.string('notes', 1000);
     })

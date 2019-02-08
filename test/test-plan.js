@@ -22,7 +22,8 @@ function seedUser() {
   };
 
   return User.hashPassword(user.password)
-    .then(hash => User.create({
+    .then(hash => User.query()
+      .insert({
       username: user.username,
       password: hash
     }))
@@ -39,17 +40,16 @@ function generatePlan(userId=null) {
   const date = faker.date.recent()
   const plan = {
     date: date.toDateString(),
-    meals: [
+    mealplans: [
       {
         meal: faker.random.word(),
         time: 'Breakfast',
-        day: 'Monday',
-        notes: faker.lorem.words()
+        day: 'Monday'
       }
     ]
   }
   if (userId) {
-    plan.userId = userId;
+    plan.user_id = userId;
   }
   return plan;
 }
@@ -59,7 +59,7 @@ function seedData() {
     .then(() => {
       const promises = [];
       for (let i = 0; i < 5; i++) {
-        promises.push(Plan.create(generatePlan(user.id)));
+        promises.push(Plan.query().insertGraph(generatePlan(user.id)));
       }
       return Promise.all(promises);
     });
@@ -67,22 +67,36 @@ function seedData() {
 
 describe('Plan', function() {
   beforeEach(function() {
-    return User.truncate({cascade: true})
+    return User.query()
+      .deleteById(1)
       .then(() => seedData());
+  });
+
+  describe('GET', function() {
+    it('should return plans made by user', function() {
+      return chai.request(app)
+        .get('/plans')
+        .set('Authorization', `Bearer ${authToken}`)
+        .then(res => {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.should.be.a('object');
+          res.body.length.should.equal(5);
+        });
+    });
   });
 
   describe('POST', function() {
     it('Should make a new plan', function() {
       const newDate = faker.date.recent();
       const newPlan = {
-        userId: user.id,
+        user_id: user.id,
         date: newDate.toDateString(),
-        meals: [
+        mealplans: [
           {
             meal: faker.random.word(),
             time: 'Lunch',
-            day: 'Sunday',
-            notes: faker.lorem.words()
+            day: 'Sunday'
           }
         ]
       };
@@ -98,22 +112,32 @@ describe('Plan', function() {
           res.body.should.include.keys('id', 'date');
           res.body.id.should.not.be.null;
           res.body.date.should.equal(newPlan.date);
-          res.body.userId.should.equal(user.id);
+          res.body.user_id.should.equal(user.id);
         })
     });
   });
 
   describe('PUT', function() {
     it('should update a plan', function() {
+      const newDate = faker.date.recent();
       let plan;
       const update = {
-        date: 'January 16, 2000'
+        user_id: user.id,
+        date: newDate.toDateString(),
+        mealplans: [
+          {
+            meal: faker.random.word(),
+            time: 'Lunch',
+            day: 'Sunday'
+          }
+        ]
       }
 
-      return Plan.findOne()
+      return Plan.query()
+        .findOne({user_id: user.id})
         .then(p => {
           plan = p;
-          update.id = plan.id.toString();
+          update.id = plan.id;
 
           return chai.request(app)
             .put(`/plans/${plan.id}`)
@@ -123,11 +147,11 @@ describe('Plan', function() {
         .then(res => {
           res.should.have.status(204);
 
-          return Plan.findByPk(plan.id);
+          return Plan.query().findById(plan.id);
         })
         .then(_plan => {
           _plan.date.should.equal(update.date);
-          _plan.userId.should.equal(user.id);
+          _plan.user_id.should.equal(user.id);
         });
     });
   })
@@ -135,7 +159,8 @@ describe('Plan', function() {
   describe('DELETE', function() {
     it('should delete a plan by ID', function() {
       let plan;
-      return Plan.findOne()
+      return Plan.query()
+        .findOne({user_id: user.id})
         .then(p => {
           plan = p;
           return chai.request(app)
@@ -144,7 +169,7 @@ describe('Plan', function() {
         })
         .then(res => {
           res.should.have.status(204);
-          return Plan.findByPk(plan.id);
+          return Plan.query().findById(plan.id);
         })
         .then(_plan => {
           should.not.exist(_plan);

@@ -14,7 +14,6 @@ class MealPlan extends Model {
 
       properties: {
         id: {type: 'integer'},
-        plan_id: {type: 'integer'},
         meal: {type: 'string'},
         time: {type: 'enum'},
         day: {type: 'enum'}
@@ -23,14 +22,16 @@ class MealPlan extends Model {
   }
 
   static get relationMappings() {
-    const Plan = require('./user');
-
     return {
       user: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Plan,
+        relation: Model.ManyToManyRelation,
+        modelClass: `${__dirname}/plan`,
         join: {
-          from: 'mealplans.plan_id',
+          from: 'mealplans.id',
+          through: {
+            from: 'meals_plans.mealplan_id',
+            to: 'meals_plans.plan_id'
+          },
           to: 'plans.id'
         }
       }

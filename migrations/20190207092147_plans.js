@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
       t.dateTime('updatedAt').nullable().defaultTo(knex.fn.now());
 
       t.string('date').notNull();
-      t.integer('user_id').references('users.id')
+      t.integer('user_id').references('users.id').onDelete('CASCADE');
     })
   ])  
 };

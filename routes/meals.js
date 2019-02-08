@@ -20,7 +20,12 @@ router.post('/', (req, res) => {
     .catch(err => res.status(500).send({message: err.message}));
 });
 
-router.put('/', (req, res) => {
+router.put('/:id', (req, res) => {
+  if (!(req.params.id && req.body.id && req.params.id == req.body.id)) {
+    const message = 'Request path ID and request body ID must match';
+    res.status(400).json({message: message});
+  }
+
   const update = req.body;
   update.user_id = req.user.id;
   

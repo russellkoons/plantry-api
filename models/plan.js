@@ -33,11 +33,15 @@ class Plan extends Model {
         }
       },
       mealplans: {
-        relation: Model.HasManyRelation,
+        relation: Model.ManyToManyRelation,
         modelClass: `${__dirname}/mealplan`,
         join: {
           from: 'plans.id',
-          to: 'mealplans.plan_id'
+          through: {
+            from: 'meals_plans.plan_id',
+            to: 'meals_plans.mealplan_id'
+          },
+          to: 'mealplans.id'
         }
       }
     }
