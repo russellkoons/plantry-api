@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 module.exports = {
 
@@ -15,8 +14,8 @@ module.exports = {
     client: 'pg',
     connection: {
       database: process.env.TEST_DATABASE_NAME,
-      user: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD
+      user: process.env.TEST_USERNAME,
+      password: process.env.TEST_PASSWORD
     },
     pool: {
       min: 2,

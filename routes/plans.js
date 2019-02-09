@@ -6,6 +6,7 @@ const { Plan } = require('../models');
 router.get('/', (req, res) => {
   return Plan.query()
     .where('user_id', req.user.id)
+    .eager('mealplans')
     .then(plans => res.status(201).json(plans))
     .catch(err => res.status(500).send({message: err}));
 })
