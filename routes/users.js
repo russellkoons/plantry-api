@@ -12,12 +12,6 @@ User.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-router.get('/', (req, res) => {
-  return User.query()
-    .then(users => res.status(201).json(users))
-    .catch(err => res.status(500).send({message: err}));
-})
-
 router.post('/', (req, res, next) => {
   const required = ['username', 'password'];
   const missing = required.find(field => !(field in req.body));
