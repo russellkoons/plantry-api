@@ -31,7 +31,7 @@ module.exports = {
   production: {
     client: 'pg',
     connection: {
-      database: 'postgres://zczajloz:aDOHz4wGiO3N--hqHdjzRBQsKG_zkoFq@elmer.db.elephantsql.com:5432/zczajloz'
+      database: process.env.DATABASE_URL
     },
     pool: {
       min: 2,
