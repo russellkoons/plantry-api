@@ -30,7 +30,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,
+    connection: process.env.HEROKU_POSTGRESQL_AMBER_URL,
     pool: {
       min: 2,
       max: 10
