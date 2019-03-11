@@ -11,6 +11,8 @@ dotenv.config();
 chai.use(chaiHttp);
 const should = chai.should();
 
+// Authorization Tests
+
 describe('Auth', function() {
   let user;
   let username;

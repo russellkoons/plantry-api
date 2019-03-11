@@ -8,6 +8,8 @@ const {User} = require('../models');
 chai.use(chaiHttp);
 const should = chai.should();
 
+// User Tests
+
 describe('Users', function() {
   describe('POST endpoint', function() {
     it('Should create a new user', function() {

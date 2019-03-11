@@ -9,6 +9,8 @@ dotenv.config();
 
 const router = express.Router();
 
+// JWT Creation Function
+
 const createAuthToken = function (user) {
   return new Promise(function (resolve, reject) {
     jwt.sign({
@@ -24,6 +26,8 @@ const createAuthToken = function (user) {
   });
 };
 
+// Login POST endpoint
+
 router.post('/login', localAuth, (req, res, next) => {
   createAuthToken(req.user)
     .then(authToken => {
@@ -35,6 +39,8 @@ router.post('/login', localAuth, (req, res, next) => {
       next(err);
     });
 });
+
+// JWT Refresh POST endpoint
 
 router.post('/refresh', jwtAuth, (req, res, next) => {
   createAuthToken(req.user)

@@ -9,6 +9,8 @@ const mealRouter = require('./routes/meals');
 
 const app = express();
 
+// Building the basic Express app
+
 app.use(cors());
 app.use(morgan('common'));
 app.use(express.json());

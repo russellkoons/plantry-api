@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { Meal } = require('../models');
 
+// GET Meals
+
 router.get('/', (req, res) => {
   return Meal.query()
     .where('user_id', req.user.id)
@@ -10,6 +12,8 @@ router.get('/', (req, res) => {
     .then(meals => res.status(201).json(meals))
     .catch(err => res.status(500).send({message: err}));
 });
+
+// POST Meals
 
 router.post('/', (req, res) => {
   const newMeal = req.body;
@@ -20,6 +24,8 @@ router.post('/', (req, res) => {
     .then(m => res.status(201).json(m))
     .catch(err => res.status(500).send({message: err.message}));
 });
+
+// PUT Meals
 
 router.put('/:id', (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id == req.body.id)) {

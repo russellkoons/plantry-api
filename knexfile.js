@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+// Knex Configuration
+
 module.exports = {
 
   development: {

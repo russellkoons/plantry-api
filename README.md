@@ -26,11 +26,11 @@ To use the app, after logging in, go to New Plan in the menu. On the New Plan pa
   - Knex
   - Objection.js
 
-## Testing
+### Testing
   - Jest
   - Enzyme
   - Mocha
   - Chai
 
-## Authentication
+### Authentication
   - JSON Web Token

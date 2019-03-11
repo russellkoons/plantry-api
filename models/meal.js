@@ -3,6 +3,8 @@ const knex = require('../knex');
 
 Model.knex(knex);
 
+// Meal Model
+
 class Meal extends Model {
   static get tableName() {
     return 'meals';

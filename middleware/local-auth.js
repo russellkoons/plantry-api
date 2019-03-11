@@ -2,47 +2,49 @@
 const bcrypt = require('bcryptjs');
 const {User} = require('../models');
 
+// Local Authorization
+
 function localAuth(req, res, next) {
-    const {username, password} = req.body;
+  const {username, password} = req.body;
 
-    if (!username && !password) {
-        const err = new Error("No credentials provided");
-        err.status = 400;
-        return next(err);
-    }
+  if (!username && !password) {
+    const err = new Error("No credentials provided");
+    err.status = 400;
+    return next(err);
+  }
 
-    let user;
-    return User.query().findOne({username: username})
-      .then(_user => {
-        user = _user;
+  let user;
+  return User.query().findOne({username: username})
+    .then(_user => {
+      user = _user;
 
-        if(!user) {
-            const err = new Error("Invalid credentials");
-            err.status = 401;
-            err.location = "username";
-            return Promise.reject(err);
-        }
+      if(!user) {
+        const err = new Error("Invalid credentials");
+        err.status = 401;
+        err.location = "username";
+        return Promise.reject(err);
+      }
 
-        return bcrypt.compare(password, user.password);
-      })
-      .then(isValid => {
+      return bcrypt.compare(password, user.password);
+    })
+    .then(isValid => {
 
-        if (!isValid) {
-            const err = new Error("Invalid credentials");
-            err.status = 401;
-            err.location = "password";
-            return Promise.reject(err);
-        }
+      if (!isValid) {
+        const err = new Error("Invalid credentials");
+        err.status = 401;
+        err.location = "password";
+        return Promise.reject(err);
+      }
 
-        req.user = {
-          id: user.id,
-          username: user.username
-        };
-        next();
-      })
-      .catch(err => {
-        next(err);
-      });
+      req.user = {
+        id: user.id,
+        username: user.username
+      };
+      next();
+    })
+    .catch(err => {
+      next(err);
+    });
 }
 
 module.exports = localAuth;

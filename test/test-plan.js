@@ -15,6 +15,8 @@ const should = chai.should();
 let user;
 let authToken;
 
+// Plan Seeding Functions
+
 function seedUser() {
   user = {
     username: faker.internet.userName(),
@@ -64,6 +66,8 @@ function seedData() {
       return Promise.all(promises);
     });
 }
+
+// Plan Tests
 
 describe('Plan', function() {
   beforeEach(function() {

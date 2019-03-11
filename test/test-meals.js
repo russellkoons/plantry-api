@@ -15,6 +15,8 @@ const should = chai.should();
 let user;
 let authToken;
 
+// Meal Seeding Functions
+
 function seedUser() {
   user = {
     username: faker.internet.userName(),
@@ -61,6 +63,8 @@ function seedData() {
       return Promise.all(promises);
     });
 }
+
+// Meal Tests
 
 describe('Meals', function() {
   beforeEach(function() {

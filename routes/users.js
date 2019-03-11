@@ -4,13 +4,19 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 
+// Password Validate
+
 User.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
+// Password Encryption
+
 User.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
+
+// User POST Endpoint
 
 router.post('/', (req, res, next) => {
   const required = ['username', 'password'];

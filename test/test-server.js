@@ -6,6 +6,8 @@ const {app} = require('../app');
 const should = chai.should();
 chai.use(chaiHttp);
 
+// Server Test
+
 describe('API', function() {
 
   it('should 200 on GET requests', function() {

@@ -3,13 +3,17 @@ const express = require('express');
 const router = express.Router();
 const { Plan } = require('../models');
 
+// GET Plans
+
 router.get('/', (req, res) => {
   return Plan.query()
     .where('user_id', req.user.id)
     .eager('mealplans')
     .then(plans => res.status(201).json(plans))
     .catch(err => res.status(500).send({message: err}));
-})
+});
+
+// POST Plans
 
 router.post('/', (req, res) => {
   const date = 'date';
@@ -26,6 +30,8 @@ router.post('/', (req, res) => {
     .catch(err => res.status(500).send({message: err.message}));
 });
 
+// PUT Plans
+
 router.put('/:id', (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id == req.body.id)) {
     const message = 'Request path ID and request body ID must match';
@@ -40,6 +46,8 @@ router.put('/:id', (req, res) => {
     .then(() => res.status(204).end())
     .catch(err => res.status(500).json({message: err.message}));
 });
+
+// DELETE Plans
 
 router.delete('/:id', (req, res) => {
   return Plan.query()
