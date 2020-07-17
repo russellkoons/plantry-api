@@ -23,7 +23,8 @@ module.exports = {
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
+      propagateCreateError: false
     },
     migrations: {
       tableName: 'knex_migrations'
@@ -35,7 +36,8 @@ module.exports = {
     connection: process.env.HEROKU_POSTGRESQL_AMBER_URL,
     pool: {
       min: 2,
-      max: 10
+      max: 10,
+      propagateCreateError: false
     },
     migrations: {
       tableName: 'knex_migrations'
