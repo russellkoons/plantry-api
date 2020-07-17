@@ -11,6 +11,9 @@ module.exports = {
       database: process.env.DATABASE_NAME,
       user: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD
+    },
+    pool: {
+      propagateCreateError: false
     }
   },
 
